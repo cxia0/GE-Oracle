@@ -7,9 +7,9 @@
 
 import Foundation
 
-class MockURLSession: URLSessionProtocol {
+final class MockURLSession: URLSessionProtocol {
 	
-	var dataClosure: () throws -> (Data, URLResponse) = { throw MockError.unimplementedFunction }
+	var dataClosure: () throws -> (Data, URLResponse) = { return (Data(), HTTPURLResponse()) }
 	
 	func data(for: URLRequest) async throws -> (Data, URLResponse) {
 

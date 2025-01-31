@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MockDataDecoder: DataDecoder {
+final class MockDataDecoder: DataDecoder {
 	
 	var decodeClosure: () throws -> Any = { throw MockError.unimplementedFunction }
 

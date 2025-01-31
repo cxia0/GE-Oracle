@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct LatestPrices: Decodable {
+struct LatestItemPrices: Decodable {
 	/// The keys are OSRS's item identifiers.
-	let data: [String: PriceData]
+	let data: [String: LatestItemPrice]
 }
 
-struct PriceData: Decodable {
+struct LatestItemPrice: Decodable {
 	
 	let high: Int
 	let highTime: Int

@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct GEOracleApp: App {
+	@State var viewModel = ItemSearchViewModel()
 	var body: some Scene {
 		WindowGroup {
-			ContentView()
+			ItemSearchView(viewModel: self.viewModel)
 		}
 	}
 }

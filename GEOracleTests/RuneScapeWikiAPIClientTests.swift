@@ -27,7 +27,7 @@ struct RuneScapeWikiAPIClientTests {
 	@Test func returnsLatestPrices() async throws {
 		self.urlSession.dataClosure = { return (Data(), Self.successfulHTTPURLResponse) }
 		/// I still don't really like mocking the decoder... The tests feel so "artificial".
-		self.decoder.decodeClosure = { return LatestPrices(data: ["1": PriceData(high: 1, highTime: 2, low: 3, lowTime: 4)]) }
+		self.decoder.decodeClosure = { return LatestItemPrices(data: ["1": LatestItemPrice(high: 1, highTime: 2, low: 3, lowTime: 4)]) }
 		
 		let latestPrices = try await self.runeScapeWikiAPIClient.fetchLatestPrices()
 		#expect(latestPrices.data.count == 1)
@@ -58,7 +58,7 @@ struct RuneScapeWikiAPIClientTests {
 	
 	@Test func throwsDecodingError() async throws {
 		self.urlSession.dataClosure = { return (Data(), Self.successfulHTTPURLResponse) }
-		self.decoder.decodeClosure = { throw NSError() }
+		self.decoder.decodeClosure = { throw NetworkServiceError.decodingError }
 		
 		await #expect(throws: NetworkServiceError.decodingError) {
 			try await self.runeScapeWikiAPIClient.fetchLatestPrices()
