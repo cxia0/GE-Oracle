@@ -9,10 +9,10 @@ import SwiftUI
 
 @Observable
 final class ItemSearchViewModel {
-	
+
 	private let itemPricesProvider: ItemPricesProvider
 	private let itemDataProvider: ItemDataProvider
-	
+
 	private var items = [Item]()
 	private(set) var itemSearchResults = [Item]()
 
@@ -27,14 +27,15 @@ final class ItemSearchViewModel {
 			self.updateItemSearchResults(with: trimmedText)
 		}
 	}
-	
-	init(itemPricesProvider: some ItemPricesProvider = RuneScapeWikiAPIClient(),
-		 itemDataProvider: some ItemDataProvider = RuneScapeWikiAPIClient()) {
 
+	init(
+		itemPricesProvider: some ItemPricesProvider = RuneScapeWikiAPIClient(),
+		itemDataProvider: some ItemDataProvider = RuneScapeWikiAPIClient()
+	) {
 		self.itemPricesProvider = itemPricesProvider
 		self.itemDataProvider = itemDataProvider
 	}
-	
+
 	func loadItems() async {
 		do {
 			self.items = try await self.itemDataProvider.fetchItems()
@@ -43,7 +44,7 @@ final class ItemSearchViewModel {
 			print(error)
 		}
 	}
-	
+
 	func updateItemSearchResults(with text: String) {
 		// TODO: Can this be made for efficient?
 		self.itemSearchResults = self.items.filter { item in
@@ -54,32 +55,31 @@ final class ItemSearchViewModel {
 
 struct ItemSearchView: View {
 	@Bindable var viewModel: ItemSearchViewModel
-    var body: some View {
-        VStack {
+	var body: some View {
+		VStack {
 			SearchBarView(searchText: self.$viewModel.searchText)
-			List {
-				ForEach(self.viewModel.itemSearchResults) { item in
-					HStack {
-						// TODO: Improve design
-						Image(systemName: "gamecontroller.fill")
-						VStack(alignment: .leading) {
-							Text(item.name)
-								.font(.headline)
-							Text(item.description)
-								.font(.footnote)
-						}
-					}
-					.listRowInsets(EdgeInsets(top: 6, leading: 10, bottom: 7, trailing: 10))
-				}
-				
-			}
-			.listStyle(.plain)
-        }
-        .padding()
+			self.searchResultsView
+		}
+		.padding()
 		.task {
 			await self.viewModel.loadItems()
 		}
-    }
+	}
+
+	var searchResultsView: some View {
+		List {
+			ForEach(self.viewModel.itemSearchResults) { item in
+				ItemRowView(
+					name: item.name,
+					description: item.description,
+					image: Image(systemName: "gamecontroller.fill")
+				)
+				.listRowInsets(EdgeInsets(top: 7, leading: 10, bottom: 7, trailing: 10))
+				.listRowSeparator(.hidden)
+			}
+		}
+		.listStyle(.plain)
+	}
 }
 
 /// Mocks are in a folder that makes them development-only assets.
