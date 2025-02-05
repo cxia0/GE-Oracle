@@ -7,52 +7,6 @@
 
 import SwiftUI
 
-@Observable
-final class ItemSearchViewModel {
-
-	private let itemPricesProvider: ItemPricesProvider
-	private let itemDataProvider: ItemDataProvider
-
-	private var items = [Item]()
-	private(set) var itemSearchResults = [Item]()
-
-	var searchText: String = "" {
-		didSet {
-			let trimmedText = self.searchText.trimmingCharacters(in: .whitespaces)
-			guard trimmedText.isEmpty == false else {
-				self.itemSearchResults = []
-				return
-			}
-
-			self.updateItemSearchResults(with: trimmedText)
-		}
-	}
-
-	init(
-		itemPricesProvider: some ItemPricesProvider = RuneScapeWikiAPIClient(),
-		itemDataProvider: some ItemDataProvider = RuneScapeWikiAPIClient()
-	) {
-		self.itemPricesProvider = itemPricesProvider
-		self.itemDataProvider = itemDataProvider
-	}
-
-	func loadItems() async {
-		do {
-			self.items = try await self.itemDataProvider.fetchItems()
-		} catch {
-			// TODO: Display error
-			print(error)
-		}
-	}
-
-	func updateItemSearchResults(with text: String) {
-		// TODO: Can this be made for efficient?
-		self.itemSearchResults = self.items.filter { item in
-			item.name.localizedCaseInsensitiveContains(text)
-		}
-	}
-}
-
 struct ItemSearchView: View {
 	@Bindable var viewModel: ItemSearchViewModel
 	var body: some View {

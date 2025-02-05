@@ -29,7 +29,8 @@ struct ItemSearchViewModelTests {
 
 		self.viewModel = ItemSearchViewModel(
 			itemPricesProvider: self.itemPricesProvider,
-			itemDataProvider: self.itemDataProvider
+			itemDataProvider: self.itemDataProvider,
+			searchDelay: .zero
 		)
 	}
 	
@@ -37,19 +38,22 @@ struct ItemSearchViewModelTests {
 
 		await self.viewModel.loadItems()
 		
-		
 		#expect(self.viewModel.itemSearchResults.count == 0)
 		
 		let swordString = "sword"
 		
-		// Search should be case insensitive
 		self.viewModel.searchText = "swo"
+		/// Updating the search results happens within an unstructured Task, so we need this sleep to ensure that Task has
+		/// run before making assertions on it. (This is not good however: order is still not guaranteed).
+		try await Task.sleep(for: .milliseconds(100))
 		#expect(self.viewModel.itemSearchResults.count == 3)
 		#expect(self.viewModel.itemSearchResults[0].name.localizedCaseInsensitiveContains(swordString))
 		#expect(self.viewModel.itemSearchResults[1].name.localizedCaseInsensitiveContains(swordString))
 		#expect(self.viewModel.itemSearchResults[2].name.localizedCaseInsensitiveContains(swordString))
 		
+		/// Search should be case insensitive
 		self.viewModel.searchText = "Swo"
+		try await Task.sleep(for: .milliseconds(100))
 		#expect(self.viewModel.itemSearchResults.count == 3)
 		#expect(self.viewModel.itemSearchResults[0].name.localizedCaseInsensitiveContains(swordString))
 		#expect(self.viewModel.itemSearchResults[1].name.localizedCaseInsensitiveContains(swordString))
