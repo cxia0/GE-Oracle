@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol DataDecoder {
+protocol DataDecoder: Sendable {
 	func decode<T>(_ type: T.Type, from: Data) throws -> T where T : Decodable
 }
 

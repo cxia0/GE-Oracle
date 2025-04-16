@@ -21,3 +21,5 @@ final class MockDataDecoder: DataDecoder {
 		return data
 	}
 }
+
+extension MockDataDecoder: @unchecked Sendable {}

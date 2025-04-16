@@ -8,7 +8,7 @@
 import Foundation
 
 enum NetworkServiceError: Error {
-	
+
 	case badURL
 	case networkError
 	case badResponse
@@ -19,57 +19,81 @@ protocol ItemPricesProvider {
 	func fetchLatestPrices() async throws(NetworkServiceError) -> LatestItemPrices
 }
 
-protocol ItemDataProvider {
+protocol ItemDataProvider: Sendable {
 	func fetchItems() async throws(NetworkServiceError) -> [Item]
 }
 
-final class RuneScapeWikiAPIClient: ItemPricesProvider, ItemDataProvider {
-	
+protocol ItemImageDataProvider: Sendable {
+	func fetchIconImageData(_ iconName: String) async throws(NetworkServiceError) -> Data
+}
+
+struct RuneScapeWikiAPIClient: ItemPricesProvider, ItemDataProvider, ItemImageDataProvider {
+
 	private let urlSession: URLSessionProtocol
 	private let dataDecoder: DataDecoder
-	
-	init(urlSession: some URLSessionProtocol = URLSession.shared,
-		 decoder: some DataDecoder = JSONDecoder()) {
+
+	private let itemDataEndpoint = "https://prices.runescape.wiki/api/v1/osrs/"
+	private let itemImagesEndpoint = "https://oldschool.runescape.wiki/images/"
+
+	init(
+		urlSession: some URLSessionProtocol = URLSession.shared,
+		decoder: some DataDecoder = JSONDecoder()
+	) {
 		self.urlSession = urlSession
 		self.dataDecoder = decoder
 	}
-	
+
 	func fetchLatestPrices() async throws(NetworkServiceError) -> LatestItemPrices {
-		
-		let url = "https://prices.runescape.wiki/api/v1/osrs/latest"
-		
+
+		let url = self.itemDataEndpoint + "latest"
+
 		return try await fetchAndDecode(LatestItemPrices.self, from: url)
 	}
-	
+
 	func fetchItems() async throws(NetworkServiceError) -> [Item] {
-		
-		let url = "https://prices.runescape.wiki/api/v1/osrs/mapping"
-		
+
+		let url = self.itemDataEndpoint + "mapping"
+
 		return try await self.fetchAndDecode([Item].self, from: url)
+	}
+
+	func fetchIconImageData(_ iconName: String) async throws(NetworkServiceError) -> Data {
+
+		let url = self.itemImagesEndpoint + iconName.replacingOccurrences(of: " ", with: "_")
+
+		return try await self.fetchData(from: url)
 	}
 }
 
 extension RuneScapeWikiAPIClient {
-	
-	private func fetchAndDecode<T>(_ type: T.Type, from urlString: String) async throws(NetworkServiceError) -> T where T : Decodable {
+
+	private func fetchData(from urlString: String) async throws(NetworkServiceError) -> Data {
+
 		guard let url = URL(string: urlString) else {
 			throw .badURL
 		}
-		
+
 		guard let (data, response) = try? await self.urlSession.data(for: URLRequest(url: url)) else {
 			throw .networkError
 		}
-		
+
 		guard let httpResponse = response as? HTTPURLResponse,
-			  (200...299).contains(httpResponse.statusCode) else {
+				(200...299).contains(httpResponse.statusCode) else {
 			throw .badResponse
 		}
-		
+
+		return data
+	}
+
+	private func fetchAndDecode<T>(
+		_ type: T.Type,
+		from urlString: String
+	) async throws(NetworkServiceError) -> T where T: Decodable {
+
+		let data = try await self.fetchData(from: urlString)
+
 		do {
-			
-			let decodedData = try self.dataDecoder.decode(type, from: data)
-			return decodedData
-			
+			return try self.dataDecoder.decode(type, from: data)
 		} catch {
 			// Want to bring more visibility to decoding errors because it could by caused
 			// by incorrect decoding code / the data structures not matching the response from the external API.

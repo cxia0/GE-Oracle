@@ -26,7 +26,10 @@ struct ItemSearchView: View {
 				ItemRowView(
 					name: item.name,
 					description: item.description,
-					image: Image(systemName: "gamecontroller.fill")
+					image: self.viewModel.itemImages[
+						item.id,
+						default: Image(systemName: "gamecontroller.fill")
+					]
 				)
 				.listRowInsets(EdgeInsets(top: 7, leading: 10, bottom: 7, trailing: 10))
 				.listRowSeparator(.hidden)
@@ -43,7 +46,8 @@ struct ItemSearchView: View {
 #Preview {
 	@Previewable @State var viewModel = ItemSearchViewModel(
 		itemPricesProvider: MockItemPricesProvider(),
-		itemDataProvider: MockItemDataProvider()
+		itemDataProvider: MockItemDataProvider(),
+		itemImageDataProvider: MockItemImageDataProvider()
 	)
 	ItemSearchView(viewModel: viewModel)
 }

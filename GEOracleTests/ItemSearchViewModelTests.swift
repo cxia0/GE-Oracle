@@ -8,6 +8,7 @@
 import Testing
 @testable import GEOracle
 
+@MainActor
 struct ItemSearchViewModelTests {
 	
 	let itemPricesProvider = MockItemPricesProvider()

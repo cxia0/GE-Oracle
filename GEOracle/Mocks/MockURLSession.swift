@@ -16,3 +16,5 @@ final class MockURLSession: URLSessionProtocol {
 		try self.dataClosure()
 	}
 }
+
+extension MockURLSession: @unchecked Sendable {}
