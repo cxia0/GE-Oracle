@@ -14,7 +14,8 @@ struct ItemRowView: View {
 	var body: some View {
 		HStack {
 			self.image
-				.font(.title2)
+				.frame(width: 40, height: 40)
+				.aspectRatio(contentMode: .fit)
 			VStack(alignment: .leading) {
 				Text(self.name)
 					.font(.headline)
