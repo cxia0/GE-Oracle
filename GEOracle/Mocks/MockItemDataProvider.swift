@@ -13,17 +13,132 @@ final class MockItemDataProvider: ItemDataProvider {
 	func fetchItems() async throws(NetworkServiceError) -> [Item] { try self.fetchItemsClosure() }
 }
 
+extension MockItemDataProvider: @unchecked Sendable {}
+
 extension Array where Element == Item {
 	static var mock: [Item] {
 		[
-			Item(id: 1, name: "Bow", description: "A cool bow", isMembersOnly: true, value: 10, lowAlchemyValue: 100, highAlchemyValue: 50, buyingLimit: 10),
-			Item(id: 2, name: "Sword", description: "A sharp sword", isMembersOnly: true, value: 10, lowAlchemyValue: 100, highAlchemyValue: 50, buyingLimit: 10),
-			Item(id: 3, name: "Shield", description: "A sturdy shield", isMembersOnly: true, value: 10, lowAlchemyValue: 100, highAlchemyValue: 50, buyingLimit: 10),
-			Item(id: 4, name: "Amulet", description: "A shiny amulet", isMembersOnly: false, value: 5, lowAlchemyValue: 50, highAlchemyValue: 25, buyingLimit: 20),
-			Item(id: 5, name: "Staff", description: "A magical staff", isMembersOnly: true, value: 15, lowAlchemyValue: 150, highAlchemyValue: 75, buyingLimit: 5),
-			Item(id: 6, name: "Potion", description: "A healing potion", isMembersOnly: false, value: 2, lowAlchemyValue: 20, highAlchemyValue: 10, buyingLimit: 100),
-			Item(id: 7, name: "Draconic Bow", description: "A bow made from dragon bones.", isMembersOnly: true, value: 2000, lowAlchemyValue: 1000, highAlchemyValue: 3000, buyingLimit: 1),
-			Item(id: 8, name: "Elven Bow", description: "A bow made by elves.", isMembersOnly: true, value: 2000, lowAlchemyValue: 1000, highAlchemyValue: 3000, buyingLimit: 1)
+			Item(
+				id: 1438,
+				name: "Air talisman",
+				description: "A mysterious power emanates from the talisman...",
+				isMembersOnly: false,
+				value: 4,
+				lowAlchemyValue: 1,
+				highAlchemyValue: 2,
+				buyingLimit: 11000,
+				iconName: "Air talisman.png"
+			),
+			Item(
+				id: 11802,
+				name: "Armadyl godsword",
+				description: "A beautiful, heavy sword.",
+				isMembersOnly: true,
+				value: 1250000,
+				lowAlchemyValue: 500000,
+				highAlchemyValue: 750000,
+				buyingLimit: 8,
+				iconName: "Armadyl godsword.png"
+			),
+			Item(
+				id: 579,
+				name: "Blue wizard hat",
+				description: "A silly pointed hat.",
+				isMembersOnly: false,
+				value: 2,
+				lowAlchemyValue: 1,
+				highAlchemyValue: 1,
+				buyingLimit: 125,
+				iconName: "Blue wizard hat.png"
+			),
+			Item(
+				id: 21009,
+				name: "Dragon sword",
+				description: "A razor sharp sword.",
+				isMembersOnly: true,
+				value: 72001,
+				lowAlchemyValue: 28800,
+				highAlchemyValue: 43200,
+				buyingLimit: 70,
+				iconName: "Dragon sword.png"
+			),
+			Item(
+				id: 20155,
+				name: "Gilded 2h sword",
+				description: "A two handed sword with gold plate.",
+				isMembersOnly: false,
+				value: 64000,
+				lowAlchemyValue: 25600,
+				highAlchemyValue: 38400,
+				buyingLimit: 70,
+				iconName: "Gilded 2h sword.png"
+			),
+			Item(
+				id: 1511,
+				name: "Logs",
+				description: "A number of wooden logs.",
+				isMembersOnly: false,
+				value: 4,
+				lowAlchemyValue: 1,
+				highAlchemyValue: 2,
+				buyingLimit: 15000,
+				iconName: "Logs.png"
+			),
+			Item(
+				id: 859,
+				name: "Magic longbow",
+				description: "A nice sturdy magical bow.",
+				isMembersOnly: true,
+				value: 2560,
+				lowAlchemyValue: 1024,
+				highAlchemyValue: 1536,
+				buyingLimit: 18000,
+				iconName: "Magic longbow.png"
+			),
+			Item(
+				id: 1201,
+				name: "Rune kiteshield",
+				description: "A large metal shield.",
+				isMembersOnly: false,
+				value: 54400,
+				lowAlchemyValue: 21760,
+				highAlchemyValue: 32640,
+				buyingLimit: 70,
+				iconName: "Rune kiteshield.png"
+			),
+			Item(
+				id: 1289,
+				name: "Rune sword",
+				description: "A razor sharp sword.",
+				isMembersOnly: false,
+				value: 20800,
+				lowAlchemyValue: 8320,
+				highAlchemyValue: 12480,
+				buyingLimit: 70,
+				iconName: "Rune sword.png"
+			),
+			Item(
+				id: 1735,
+				name: "Shears",
+				description: "For shearing sheep.",
+				isMembersOnly: false,
+				value: 1,
+				lowAlchemyValue: 1,
+				highAlchemyValue: 1,
+				buyingLimit: 40,
+				iconName: "Shears.png"
+			),
+			Item(
+				id: 1617,
+				name: "Uncut diamond",
+				description: "This would be worth more cut.",
+				isMembersOnly: false,
+				value: 200,
+				lowAlchemyValue: 80,
+				highAlchemyValue: 120,
+				buyingLimit: 10000,
+				iconName: "Uncut diamond.png"
+			)
 		]
 	}
 }
