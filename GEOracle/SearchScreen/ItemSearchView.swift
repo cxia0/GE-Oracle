@@ -45,9 +45,9 @@ struct ItemSearchView: View {
 #if DEBUG
 #Preview {
 	@Previewable @State var viewModel = ItemSearchViewModel(
-		itemPricesProvider: MockItemPricesProvider(),
-		itemDataProvider: MockItemDataProvider(),
-		itemImageDataProvider: MockItemImageDataProvider()
+		itemPricesProvider: StubItemPricesProvider(),
+		itemDataProvider: StubItemDataProvider(),
+		itemImageDataProvider: StubItemImageDataProvider()
 	)
 	ItemSearchView(viewModel: viewModel)
 }

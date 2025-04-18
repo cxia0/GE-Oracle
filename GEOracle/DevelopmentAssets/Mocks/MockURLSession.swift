@@ -9,8 +9,8 @@ import Foundation
 
 final class MockURLSession: URLSessionProtocol {
 	
-	var dataClosure: () throws -> (Data, URLResponse) = { return (Data(), HTTPURLResponse()) }
-	
+	var dataClosure: () throws -> (Data, URLResponse) = { fatalError("❓ Unimplemented: \(#function)") }
+
 	func data(for: URLRequest) async throws -> (Data, URLResponse) {
 
 		try self.dataClosure()

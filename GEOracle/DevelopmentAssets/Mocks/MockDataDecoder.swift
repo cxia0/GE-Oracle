@@ -9,7 +9,7 @@ import Foundation
 
 final class MockDataDecoder: DataDecoder {
 	
-	var decodeClosure: () throws -> Any = { throw MockError.unimplementedFunction }
+	var decodeClosure: () throws -> Any = { fatalError("❓ Unimplemented: \(#function)") }
 
 	func decode<T>(_ type: T.Type, from: Data) throws -> T where T : Decodable {
 

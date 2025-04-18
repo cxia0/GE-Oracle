@@ -1,5 +1,5 @@
 //
-//  MockItemDataProvider.swift
+//  StubItemDataProvider.swift
 //  GEOracle
 //
 //  Created by Chunfeng Xia on 29/01/2025.
@@ -7,13 +7,10 @@
 
 import Foundation
 
-final class MockItemDataProvider: ItemDataProvider {
-	
-	var fetchItemsClosure: () throws(NetworkServiceError) -> [Item] = { .mock }
-	func fetchItems() async throws(NetworkServiceError) -> [Item] { try self.fetchItemsClosure() }
-}
+struct StubItemDataProvider: ItemDataProvider {
 
-extension MockItemDataProvider: @unchecked Sendable {}
+	func fetchItems() async throws(NetworkServiceError) -> [Item] { .mock }
+}
 
 extension Array where Element == Item {
 	static var mock: [Item] {
