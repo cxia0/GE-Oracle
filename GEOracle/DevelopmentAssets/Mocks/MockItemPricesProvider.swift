@@ -15,3 +15,5 @@ final class MockItemPricesProvider: ItemPricesProvider {
 		try self.fetchLatestPricesClosure()
 	}
 }
+
+extension MockItemPricesProvider: @unchecked Sendable {}

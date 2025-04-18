@@ -15,7 +15,7 @@ enum NetworkServiceError: Error {
 	case decodingError
 }
 
-protocol ItemPricesProvider {
+protocol ItemPricesProvider: Sendable {
 	func fetchLatestPrices() async throws(NetworkServiceError) -> LatestItemPrices
 }
 
