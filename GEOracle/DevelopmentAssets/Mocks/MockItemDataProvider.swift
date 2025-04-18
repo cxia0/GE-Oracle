@@ -5,8 +5,6 @@
 //  Created by Chunfeng Xia on 16/04/2025.
 //
 
-import IssueReporting
-
 final class MockItemDataProvider: ItemDataProvider {
 
 	var fetchItemsClosure: () throws(NetworkServiceError) -> [Item] = {
