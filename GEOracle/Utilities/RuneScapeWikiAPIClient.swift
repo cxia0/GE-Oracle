@@ -73,7 +73,8 @@ extension RuneScapeWikiAPIClient {
 			throw .badURL
 		}
 
-		guard let (data, response) = try? await self.urlSession.data(for: URLRequest(url: url)) else {
+		let urlRequest = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
+		guard let (data, response) = try? await self.urlSession.data(for: urlRequest) else {
 			throw .networkError
 		}
 

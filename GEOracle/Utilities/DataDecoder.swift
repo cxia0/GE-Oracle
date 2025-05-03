@@ -12,4 +12,3 @@ protocol DataDecoder: Sendable {
 }
 
 extension JSONDecoder: DataDecoder {}
-

@@ -21,19 +21,14 @@ struct ItemSearchView: View {
 	}
 
 	var searchResultsView: some View {
-		List {
-			ForEach(self.viewModel.itemSearchResults) { item in
-				ItemRowView(
-					name: item.name,
-					description: item.description,
-					image: self.viewModel.itemImages[
-						item.id,
-						default: Image(systemName: "gamecontroller.fill")
-					]
-				)
-				.listRowInsets(EdgeInsets(top: 7, leading: 10, bottom: 7, trailing: 10))
-				.listRowSeparator(.hidden)
-			}
+		List(self.viewModel.itemSearchResults) { item in
+			ItemRowView(
+				name: item.name,
+				description: item.description,
+				iconName: item.iconName
+			)
+			.listRowInsets(EdgeInsets(top: 7, leading: 10, bottom: 7, trailing: 10))
+			.listRowSeparator(.hidden)
 		}
 		.listStyle(.plain)
 	}

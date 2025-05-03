@@ -10,10 +10,11 @@ import SwiftUI
 struct ItemRowView: View {
 	let name: String
 	let description: String
-	let image: Image
+	let iconName: String
+
 	var body: some View {
 		HStack {
-			self.image
+			ItemIconImage(viewModel: ItemIconImageViewModel(iconName: iconName))
 				.frame(width: 40, height: 40)
 				.aspectRatio(contentMode: .fit)
 			VStack(alignment: .leading) {
@@ -30,6 +31,6 @@ struct ItemRowView: View {
 	ItemRowView(
 		name: "Bow",
 		description: "A wooden bow.",
-		image: Image(systemName: "gamecontroller.fill")
+		iconName: "Air talisman.png"
 	)
 }

@@ -8,8 +8,8 @@
 import Observation
 import SwiftUI
 
-@MainActor
 @Observable
+@MainActor
 final class ItemSearchViewModel {
 
 	// Dependencies
@@ -74,19 +74,6 @@ extension ItemSearchViewModel {
 			await MainActor.run {
 				itemSearchResults = self.searchForItems(with: self.searchText, self.items)
 				self.itemSearchResults = itemSearchResults
-			}
-
-			let imageProvider = self.itemImageDataProvider
-
-			for item in itemSearchResults {
-
-				try Task.checkCancellation()
-
-				let imageData = try await imageProvider.fetchIconImageData(item.iconName)
-				guard let uiImage = UIImage(data: imageData) else { return }
-				Task { @MainActor in
-					self.itemImages[item.id] = Image(uiImage: uiImage)
-				}
 			}
 		}
 	}
