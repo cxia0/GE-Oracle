@@ -1,5 +1,5 @@
 //
-//  ItemIconImage.swift
+//  ItemIconImageView.swift
 //  GEOracle
 //
 //  Created by Chunfeng Xia on 30/04/2025.
@@ -47,7 +47,7 @@ final class ItemIconImageViewModel {
 	}
 }
 
-struct ItemIconImage: View {
+struct ItemIconImageView: View {
 	@State var viewModel: ItemIconImageViewModel
 
 	init(viewModel: ItemIconImageViewModel) {
@@ -71,7 +71,7 @@ struct ItemIconImage: View {
 }
 
 #Preview(traits: .fixedLayout(width: 100, height: 100)) {
-	ItemIconImage(
+	ItemIconImageView(
 		viewModel: ItemIconImageViewModel(
 			iconName: "Air_talisman.png",
 			itemImageDataProvider: StubItemImageDataProvider(delay: .seconds(1.5))

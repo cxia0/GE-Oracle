@@ -14,7 +14,7 @@ struct ItemRowView: View {
 
 	var body: some View {
 		HStack {
-			ItemIconImage(viewModel: ItemIconImageViewModel(iconName: iconName))
+			ItemIconImageView(viewModel: ItemIconImageViewModel(iconName: iconName))
 				.frame(width: 40, height: 40)
 				.aspectRatio(contentMode: .fit)
 			VStack(alignment: .leading) {
