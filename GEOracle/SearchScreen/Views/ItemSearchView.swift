@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ItemSearchView: View {
-	@Bindable var viewModel: ItemSearchViewModel
+	@State var viewModel = ItemSearchViewModel()
+
 	var body: some View {
 		VStack {
 			SearchBarView(searchText: self.$viewModel.searchText)
@@ -39,11 +40,7 @@ struct ItemSearchView: View {
 /// Xcode most likely strips or unlinks the code from the Release artifact AFTER the build.
 #if DEBUG
 #Preview {
-	@Previewable @State var viewModel = ItemSearchViewModel(
-		itemPricesProvider: StubItemPricesProvider(),
-		itemDataProvider: StubItemDataProvider(),
-		itemImageDataProvider: StubItemImageDataProvider()
-	)
-	ItemSearchView(viewModel: viewModel)
+	let _ = DC.shared.register(StubItemDataProvider(), forType: ItemDataProvider.self)
+	ItemSearchView()
 }
 #endif

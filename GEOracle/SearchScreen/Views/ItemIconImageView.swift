@@ -24,10 +24,9 @@ final class ItemIconImageViewModel {
 
 	init(
 		iconName: String,
-		itemImageDataProvider: ItemImageDataProvider = RuneScapeWikiAPIClient()
 	) {
 		self.iconName = iconName
-		self.imageDataProvider = itemImageDataProvider
+		self.imageDataProvider = DC.shared.resolve(forType: ItemImageDataProvider.self)!
 	}
 
 	func loadImage() async {
@@ -71,10 +70,11 @@ struct ItemIconImageView: View {
 }
 
 #Preview(traits: .fixedLayout(width: 100, height: 100)) {
+	let _ = DC.shared.register(StubItemImageDataProvider(), forType: ItemImageDataProvider.self)
+
 	ItemIconImageView(
 		viewModel: ItemIconImageViewModel(
 			iconName: "Air_talisman.png",
-			itemImageDataProvider: StubItemImageDataProvider(delay: .seconds(1.5))
 		)
 	)
 	.frame(width: 40, height: 40)

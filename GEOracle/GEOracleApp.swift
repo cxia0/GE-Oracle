@@ -9,10 +9,16 @@ import SwiftUI
 
 @main
 struct GEOracleApp: App {
-	@State var viewModel = ItemSearchViewModel()
+
+	init() {
+		DC.shared.register(RuneScapeWikiAPIClient(), forType: ItemPricesProvider.self)
+		DC.shared.register(RuneScapeWikiAPIClient(), forType: ItemImageDataProvider.self)
+		DC.shared.register(RuneScapeWikiAPIClient(), forType: ItemDataProvider.self)
+	}
+
 	var body: some Scene {
 		WindowGroup {
-			ItemSearchView(viewModel: self.viewModel)
+			ItemSearchView()
 		}
 	}
 }

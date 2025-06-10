@@ -28,15 +28,11 @@ final class ItemSearchViewModel {
 		didSet { searchTextDidChange() }
 	}
 
-	init(
-		itemPricesProvider: some ItemPricesProvider = RuneScapeWikiAPIClient(),
-		itemDataProvider: some ItemDataProvider = RuneScapeWikiAPIClient(),
-		itemImageDataProvider: some ItemImageDataProvider = RuneScapeWikiAPIClient(),
-		searchDelay: Duration = .milliseconds(300)
-	) {
-		self.itemPricesProvider = itemPricesProvider
-		self.itemDataProvider = itemDataProvider
-		self.itemImageDataProvider = itemImageDataProvider
+	init(searchDelay: Duration = .milliseconds(300)) {
+		self.itemPricesProvider = DC.shared.resolve(forType: ItemPricesProvider.self)!
+		self.itemDataProvider = DC.shared.resolve(forType: ItemDataProvider.self)!
+		self.itemImageDataProvider = DC.shared.resolve(forType: ItemImageDataProvider.self)!
+
 		self.searchDelay = searchDelay
 	}
 

@@ -99,7 +99,7 @@ extension RuneScapeWikiAPIClient {
 			// Want to bring more visibility to decoding errors because it could by caused
 			// by incorrect decoding code / the data structures not matching the response from the external API.
 			#if DEBUG
-			print("💥", error)
+			debugPrint("💥", error)
 			#endif
 			throw NetworkServiceError.decodingError
 		}
