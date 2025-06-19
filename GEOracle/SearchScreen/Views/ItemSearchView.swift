@@ -40,7 +40,21 @@ struct ItemSearchView: View {
 /// Xcode most likely strips or unlinks the code from the Release artifact AFTER the build.
 #if DEBUG
 #Preview {
-	let _ = DC.shared.register(StubItemDataProvider(), forType: ItemDataProvider.self)
+	let _ = DC.shared.register(
+		StubItemDataProvider(),
+		forType: ItemDataProvider.self
+	)
+
+	let _ = DC.shared.register(
+		StubItemPricesProvider(),
+		forType: ItemPricesProvider.self
+	)
+
+	let _ = DC.shared.register(
+		StubItemImageDataProvider(delay: .seconds(1)),
+		forType: ItemImageDataProvider.self
+	)
+
 	ItemSearchView()
 }
 #endif

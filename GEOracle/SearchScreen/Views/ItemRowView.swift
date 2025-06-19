@@ -22,15 +22,18 @@ struct ItemRowView: View {
 					.font(.headline)
 				Text(self.description)
 					.font(.footnote)
+					.lineLimit(1)
 			}
 		}
 	}
 }
 
 #Preview {
+	let _ = DC.shared.register(StubItemImageDataProvider(), forType: ItemImageDataProvider.self)
+
 	ItemRowView(
 		name: "Bow",
-		description: "A wooden bow.",
+		description: "A wooden bow. A wooden bow. A wooden bow. A wooden bow.",
 		iconName: "Air talisman.png"
 	)
 }
