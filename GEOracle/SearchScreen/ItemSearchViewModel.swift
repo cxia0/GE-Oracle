@@ -17,16 +17,17 @@ final class ItemSearchViewModel {
 	@ObservationIgnored private let itemDataProvider: ItemDataProvider
 	@ObservationIgnored private let itemImageDataProvider: ItemImageDataProvider
 
-	@ObservationIgnored private var items = [Item]()
+	// Public
 	private(set) var itemSearchResults = [Item]()
 	private(set) var itemImages = [Int: Image]()
+	@ObservationIgnored var searchText: String = "" {
+		didSet { self.searchTextDidChange() }
+	}
 
+	// Private
+	@ObservationIgnored private var items = [Item]()
 	@ObservationIgnored private let searchDelay: Duration
 	@ObservationIgnored private var searchTask: Task<(), Error>?
-
-	@ObservationIgnored var searchText: String = "" {
-		didSet { searchTextDidChange() }
-	}
 
 	init(searchDelay: Duration = .milliseconds(300)) {
 		self.itemPricesProvider = DC.shared.resolve(forType: ItemPricesProvider.self)!
