@@ -20,7 +20,7 @@ final class ItemSearchViewModel {
 	// Public
 	private(set) var itemSearchResults = [Item]()
 	private(set) var itemImages = [Int: Image]()
-	@ObservationIgnored var searchText: String = "" {
+	@ObservationIgnored var searchText: String {
 		didSet { self.searchTextDidChange() }
 	}
 
@@ -29,12 +29,18 @@ final class ItemSearchViewModel {
 	@ObservationIgnored private let searchDelay: Duration
 	@ObservationIgnored private var searchTask: Task<(), Error>?
 
-	init(searchDelay: Duration = .milliseconds(300)) {
+	init(
+		searchDelay: Duration = .milliseconds(300),
+		initialSearch: String = ""
+	) {
 		self.itemPricesProvider = DC.shared.resolve(forType: ItemPricesProvider.self)!
 		self.itemDataProvider = DC.shared.resolve(forType: ItemDataProvider.self)!
 		self.itemImageDataProvider = DC.shared.resolve(forType: ItemImageDataProvider.self)!
 
 		self.searchDelay = searchDelay
+
+		self.searchText = initialSearch
+		self.searchTextDidChange()
 	}
 
 	func loadItems() async {

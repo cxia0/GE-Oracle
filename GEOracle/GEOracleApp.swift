@@ -10,6 +10,8 @@ import SwiftUI
 @main
 struct GEOracleApp: App {
 
+	@State private var path = NavigationPath()
+
 	init() {
 		DC.shared.register(RuneScapeWikiAPIClient(), forType: ItemPricesProvider.self)
 		DC.shared.register(RuneScapeWikiAPIClient(), forType: ItemImageDataProvider.self)
@@ -18,7 +20,12 @@ struct GEOracleApp: App {
 
 	var body: some Scene {
 		WindowGroup {
-			ItemSearchView()
+			NavigationStack(path: self.$path) {
+				ItemSearchView()
+					.navigationDestination(for: String.self) { string in
+						Text(string)
+					}
+			}
 		}
 	}
 }

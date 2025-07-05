@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ItemSearchView: View {
-	@State var viewModel = ItemSearchViewModel()
+    @State var viewModel = ItemSearchViewModel()
 
 	var body: some View {
 		VStack {
@@ -23,11 +23,14 @@ struct ItemSearchView: View {
 
 	var searchResultsView: some View {
 		List(self.viewModel.itemSearchResults) { item in
-			ItemRowView(
-				name: item.name,
-				description: item.description,
-				iconName: item.iconName
-			)
+            ItemRowView(
+                name: item.name,
+                description: item.description,
+                iconName: item.iconName
+            )
+            .background( // Hack to remove the default styling
+                NavigationLink("", value: item.name).opacity(0)
+            )
 			.listRowInsets(EdgeInsets(top: 7, leading: 10, bottom: 7, trailing: 10))
 			.listRowSeparator(.hidden)
 		}
@@ -55,6 +58,8 @@ struct ItemSearchView: View {
 		forType: ItemImageDataProvider.self
 	)
 
-	ItemSearchView()
+    NavigationStack {
+        ItemSearchView()
+    }
 }
 #endif
