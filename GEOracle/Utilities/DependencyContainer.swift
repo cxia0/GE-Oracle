@@ -13,7 +13,7 @@ final class DependencyContainer: @unchecked Sendable {
 
 	static let shared = DependencyContainer()
 
-    private init() {}
+	private init() {}
 
 	private var dependencies = [String: Any]()
 
@@ -41,18 +41,18 @@ final class DependencyContainer: @unchecked Sendable {
 	}
 
 	func resolve<Dependency: Sendable>(forType type: Dependency.Type) -> Dependency? {
-		 var result: Dependency?
-		 self.queue.sync {
-			  guard let value = self.dependencies["\(type)"] else { return }
-			  switch value {
-			  case let dependency as Dependency:
-					result = dependency
-			  case let factory as () -> Dependency:
-					result = factory()
-			  default:
-					break
-			  }
-		 }
-		 return result
+		var result: Dependency?
+		self.queue.sync {
+			guard let value = self.dependencies["\(type)"] else { return }
+			switch value {
+			case let dependency as Dependency:
+				result = dependency
+			case let factory as () -> Dependency:
+				result = factory()
+			default:
+				break
+			}
+		}
+		return result
 	}
 }

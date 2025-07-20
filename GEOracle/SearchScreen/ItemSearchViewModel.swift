@@ -106,7 +106,8 @@ extension ItemSearchViewModel {
 				.widthInsensitive,
 				.diacriticInsensitive,
 			],
-			locale: nil)
+			locale: nil
+		)
 
 		var results = [Item]()
 

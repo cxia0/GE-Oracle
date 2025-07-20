@@ -33,8 +33,10 @@ final class ItemIconImageViewModel {
 		do {
 			self.state = .loading
 
-			guard let imageData = try? await self.imageDataProvider.fetchIconImageData(iconName),
-					let uiImage = UIImage(data: imageData) else {
+			guard
+				let imageData = try? await self.imageDataProvider.fetchIconImageData(iconName),
+				let uiImage = UIImage(data: imageData)
+			else {
 				self.state = .failedToLoad
 				return
 			}
@@ -70,7 +72,10 @@ struct ItemIconImageView: View {
 }
 
 #Preview(traits: .fixedLayout(width: 100, height: 100)) {
-	let _ = DC.shared.register(StubItemImageDataProvider(), forType: ItemImageDataProvider.self)
+	let _ = DC.shared.register(
+		StubItemImageDataProvider(),
+        forType: ItemImageDataProvider.self
+    )
 
 	ItemIconImageView(
 		viewModel: ItemIconImageViewModel(

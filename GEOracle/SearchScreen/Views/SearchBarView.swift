@@ -13,7 +13,8 @@ struct SearchBarView: View {
 		HStack {
 			Image(systemName: "magnifyingglass")
 			TextField("Search", text: self.$searchText)
-				.textFieldStyle(.plain) /// This stops `searchText`'s `didSet` from running twice.
+				.textFieldStyle(.plain)
+			/// This stops `searchText`'s `didSet` from running twice.
 		}
 		.padding(10)
 		.background(.regularMaterial, in: RoundedRectangle(cornerRadius: 15))

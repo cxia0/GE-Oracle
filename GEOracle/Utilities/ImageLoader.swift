@@ -29,8 +29,8 @@ struct ImageLoader<Cache: KeyValueCache<String, UIImage>>: ImageProvider {
 		}
 
 		guard let url = URL(string: urlString),
-				let (data, _) = try? await self.urlSession.data(for: URLRequest(url: url)),
-				let image = UIImage(data: data)
+              let (data, _) = try? await self.urlSession.data(for: URLRequest(url: url)),
+              let image = UIImage(data: data)
 		else {
 
 			return nil

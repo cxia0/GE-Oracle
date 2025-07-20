@@ -29,7 +29,10 @@ struct ItemRowView: View {
 }
 
 #Preview {
-	let _ = DC.shared.register(StubItemImageDataProvider(), forType: ItemImageDataProvider.self)
+	let _ = DC.shared.register(
+		StubItemImageDataProvider(),
+        forType: ItemImageDataProvider.self
+    )
 
 	ItemRowView(
 		name: "Bow",
