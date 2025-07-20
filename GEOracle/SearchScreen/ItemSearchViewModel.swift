@@ -18,14 +18,14 @@ final class ItemSearchViewModel {
 	@ObservationIgnored private let itemImageDataProvider: ItemImageDataProvider
 
 	// Public
-	private(set) var itemSearchResults = [Item]()
+	private(set) var searchResults = [Item]()
 	private(set) var itemImages = [Int: Image]()
 	@ObservationIgnored var searchText: String {
 		didSet { self.searchTextDidChange() }
 	}
 
 	// Private
-	@ObservationIgnored private var items = [Item]()
+	@ObservationIgnored private var searchableItems = [(Item, String)]()
 	@ObservationIgnored private let searchDelay: Duration
 	@ObservationIgnored private var searchTask: Task<(), Error>?
 
@@ -45,7 +45,20 @@ final class ItemSearchViewModel {
 
 	func loadItems() async {
 		do {
-			self.items = try await self.itemDataProvider.fetchItems()
+			let items = try await self.itemDataProvider.fetchItems()
+			self.searchableItems = items.map { item in
+
+				let normalizedName = item.name.folding(
+					options: [
+						.caseInsensitive,
+						.widthInsensitive,
+						.diacriticInsensitive,
+					],
+					locale: nil
+				)
+
+				return (item, normalizedName)
+			}
 		} catch {
 			// TODO: Display error
 			print(error)
@@ -57,37 +70,53 @@ extension ItemSearchViewModel {
 
 	private func searchTextDidChange() {
 
-		let trimmedText = self.searchText.trimmingCharacters(in: .whitespaces)
-
 		self.searchTask?.cancel()
 
+		let trimmedText = self.searchText.trimmingCharacters(in: .whitespaces)
 		guard trimmedText.isEmpty == false else {
-			self.itemSearchResults = []
+			self.searchResults = []
 			return
 		}
 
-		self.searchTask = Task {
+		self.searchTask = Task.detached(priority: .userInitiated) {
 
 			try await Task.sleep(for: self.searchDelay)
 
 			try Task.checkCancellation()
 
-			var itemSearchResults = [Item]()
+			let itemSearchResults = try await self.search(
+				for: self.searchText,
+				in: self.searchableItems
+			)
 
 			await MainActor.run {
-				itemSearchResults = self.searchForItems(with: self.searchText, self.items)
-				self.itemSearchResults = itemSearchResults
+				self.searchResults = itemSearchResults
 			}
 		}
 	}
 
-	private func searchForItems(
-		with itemName: String,
-		_ items: [Item]
-	) -> [Item] {
-		// TODO: Can this be made more efficient?
-		return items.filter { item in
-			item.name.localizedCaseInsensitiveContains(itemName)
+	nonisolated private func search(
+		for query: String,
+		in items: [(Item, String)]
+	) throws -> [Item] {
+
+		let normalizedSearch = query.folding(
+			options: [
+				.caseInsensitive,
+				.widthInsensitive,
+				.diacriticInsensitive,
+			],
+			locale: nil)
+
+		var results = [Item]()
+
+		for (item, normalizedName) in items {
+			try Task.checkCancellation()
+			if normalizedName.contains(normalizedSearch) {
+				results.append(item)
+			}
 		}
+
+		return results
 	}
 }

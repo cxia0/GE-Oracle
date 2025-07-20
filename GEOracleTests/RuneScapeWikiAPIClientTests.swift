@@ -58,7 +58,7 @@ struct RuneScapeWikiAPIClientTests {
 	
 	@Test func throwsDecodingError() async throws {
 		self.urlSession.dataClosure = { return (Data(), Self.successfulHTTPURLResponse) }
-		self.decoder.decodeClosure = { throw NetworkServiceError.decodingError }
+		self.decoder.decodeClosure = { throw DummyError() }
 		
 		await #expect(throws: NetworkServiceError.decodingError) {
 			try await self.runeScapeWikiAPIClient.fetchLatestPrices()

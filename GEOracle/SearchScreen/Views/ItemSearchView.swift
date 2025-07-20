@@ -22,7 +22,7 @@ struct ItemSearchView: View {
 	}
 
 	var searchResultsView: some View {
-		List(self.viewModel.itemSearchResults) { item in
+		List(self.viewModel.searchResults) { item in
             ItemRowView(
                 name: item.name,
                 description: item.description,

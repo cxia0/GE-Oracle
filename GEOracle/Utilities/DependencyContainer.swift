@@ -13,6 +13,8 @@ final class DependencyContainer: @unchecked Sendable {
 
 	static let shared = DependencyContainer()
 
+    private init() {}
+
 	private var dependencies = [String: Any]()
 
 	private var queue = DispatchQueue(
