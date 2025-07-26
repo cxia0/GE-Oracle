@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Item: Identifiable, Decodable {
+struct Item: Identifiable, Decodable, Hashable {
 
 	let id: Int
 	let name: String
@@ -17,7 +17,7 @@ struct Item: Identifiable, Decodable {
 	/// An item's static value in coins (predetermined by Jagex).
 	///
 	/// Value is used to determine how much an item is worth to Non-player characters and to the game.
-	let value: Int
+	let value: Int?
 
 	let lowAlchemyValue: Int?
 	let highAlchemyValue: Int?

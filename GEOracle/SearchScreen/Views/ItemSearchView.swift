@@ -28,9 +28,7 @@ struct ItemSearchView: View {
 				description: item.description,
 				iconName: item.iconName
 			)
-			.background(  // Hack to remove the default styling
-				NavigationLink("", value: item.name).opacity(0)
-			)
+            .invisibleNavigationLink(value: SearchScreenDestination.itemDetailView(item))
 			.listRowInsets(EdgeInsets(top: 7, leading: 10, bottom: 7, trailing: 10))
 			.listRowSeparator(.hidden)
 		}
