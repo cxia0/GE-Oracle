@@ -25,7 +25,7 @@ struct GEOracleApp: App {
                     .navigationDestination(for: SearchScreenDestination.self) { destination in
                         switch destination {
                         case .itemDetailView(let item):
-                            Text(item.name)
+                            ItemDetailScreen(item: item)
                         }
                     }
 			}

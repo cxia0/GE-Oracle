@@ -9,7 +9,7 @@ import Foundation
 
 struct StubItemDataProvider: ItemDataProvider {
 
-	func fetchItems() async throws(NetworkServiceError) -> [Item] { .mock }
+	func fetchItems() -> [Item] { .mock }
 }
 
 extension Array where Element == Item {

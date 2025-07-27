@@ -51,8 +51,8 @@ final class ItemIconImageViewModel {
 struct ItemIconImageView: View {
 	@State var viewModel: ItemIconImageViewModel
 
-	init(viewModel: ItemIconImageViewModel) {
-		self.viewModel = viewModel
+    init(iconName: String) {
+        self.viewModel = ItemIconImageViewModel(iconName: iconName)
 	}
 
 	var body: some View {
@@ -65,6 +65,8 @@ struct ItemIconImageView: View {
 				}
 		case .loaded(let image):
 			image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
 		case .failedToLoad:
 			Image(systemName: "photo").opacity(0.5)
 		}
@@ -78,9 +80,7 @@ struct ItemIconImageView: View {
     )
 
 	ItemIconImageView(
-		viewModel: ItemIconImageViewModel(
-			iconName: "Air_talisman.png",
-		)
+        iconName: "Air_talisman.png",
 	)
 	.frame(width: 40, height: 40)
 }

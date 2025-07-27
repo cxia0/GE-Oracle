@@ -17,6 +17,11 @@ enum NetworkServiceError: Error {
 
 protocol ItemPricesProvider: Sendable {
 	func fetchLatestPrices() async throws(NetworkServiceError) -> LatestItemPrices
+
+	func fetchHistoricalData(
+		itemId: Int,
+		stepSize: HistoricalDataTimestep
+	) async throws(NetworkServiceError) -> [HistoricalItemPrice]
 }
 
 protocol ItemDataProvider: Sendable {
@@ -27,7 +32,15 @@ protocol ItemImageDataProvider: Sendable {
 	func fetchIconImageData(_ iconName: String) async throws(NetworkServiceError) -> Data
 }
 
-struct RuneScapeWikiAPIClient: ItemPricesProvider, ItemDataProvider, ItemImageDataProvider {
+enum HistoricalDataTimestep {
+	case fiveMinutes
+	case oneHour
+	case sixHours
+	case oneDay
+}
+
+struct RuneScapeWikiAPIClient: ItemPricesProvider, ItemDataProvider, ItemImageDataProvider
+{
 
 	private let urlSession: URLSessionProtocol
 	private let dataDecoder: DataDecoder
@@ -43,11 +56,34 @@ struct RuneScapeWikiAPIClient: ItemPricesProvider, ItemDataProvider, ItemImageDa
 		self.dataDecoder = decoder
 	}
 
+	/// Fetches the latest prices of all items.
 	func fetchLatestPrices() async throws(NetworkServiceError) -> LatestItemPrices {
 
 		let url = self.itemDataEndpoint + "latest"
 
 		return try await fetchAndDecode(LatestItemPrices.self, from: url)
+	}
+
+	func fetchHistoricalData(itemId: Int, stepSize: HistoricalDataTimestep)
+		async throws(NetworkServiceError) -> [HistoricalItemPrice]
+	{
+		let timeStepParameter: String
+
+		switch stepSize {
+		case .fiveMinutes:
+			timeStepParameter = "5m"
+		case .oneHour:
+			timeStepParameter = "1h"
+		case .sixHours:
+			timeStepParameter = "6h"
+		case .oneDay:
+			timeStepParameter = "24h"
+		}
+
+		let url =
+			self.itemDataEndpoint + "/timeseries?id=\(itemId)&timestep=\(timeStepParameter)"
+		let response = try await self.fetchAndDecode(HistoricalItemPricesResponse.self, from: url)
+		return response.data
 	}
 
 	func fetchItems() async throws(NetworkServiceError) -> [Item] {
@@ -59,7 +95,8 @@ struct RuneScapeWikiAPIClient: ItemPricesProvider, ItemDataProvider, ItemImageDa
 
 	func fetchIconImageData(_ iconName: String) async throws(NetworkServiceError) -> Data {
 
-		let url = self.itemImagesEndpoint + iconName.replacingOccurrences(of: " ", with: "_")
+		let url =
+			self.itemImagesEndpoint + iconName.replacingOccurrences(of: " ", with: "_")
 
 		return try await self.fetchData(from: url)
 	}
@@ -67,7 +104,9 @@ struct RuneScapeWikiAPIClient: ItemPricesProvider, ItemDataProvider, ItemImageDa
 
 extension RuneScapeWikiAPIClient {
 
-	private func fetchData(from urlString: String) async throws(NetworkServiceError) -> Data {
+	private func fetchData(from urlString: String) async throws(NetworkServiceError)
+		-> Data
+	{
 
 		guard let url = URL(string: urlString) else {
 			throw .badURL
@@ -79,7 +118,8 @@ extension RuneScapeWikiAPIClient {
 		}
 
 		guard let httpResponse = response as? HTTPURLResponse,
-				(200...299).contains(httpResponse.statusCode) else {
+			(200...299).contains(httpResponse.statusCode)
+		else {
 			throw .badResponse
 		}
 

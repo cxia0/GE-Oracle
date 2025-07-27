@@ -7,6 +7,13 @@
 
 final class MockItemPricesProvider: ItemPricesProvider {
 
+	func fetchHistoricalData(
+		itemId: Int,
+		stepSize: HistoricalDataTimestep
+	) async throws(NetworkServiceError) -> [HistoricalItemPrice] {
+		fatalError("❓ Unimplemented: \(#function)")
+	}
+
 	var fetchLatestPricesClosure: () throws(NetworkServiceError) -> LatestItemPrices = {
 		fatalError("❓ Unimplemented: \(#function)")
 	}
