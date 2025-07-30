@@ -22,12 +22,12 @@ struct GEOracleApp: App {
 		WindowGroup {
 			NavigationStack(path: self.$path) {
 				ItemSearchView()
-                    .navigationDestination(for: SearchScreenDestination.self) { destination in
-                        switch destination {
-                        case .itemDetailView(let item):
-                            ItemDetailScreen(item: item)
-                        }
-                    }
+					.navigationDestination(for: SearchScreenDestination.self) { destination in
+						switch destination {
+						case .itemDetailView(let item):
+							ItemDetailScreen(item: item)
+						}
+					}
 			}
 		}
 	}

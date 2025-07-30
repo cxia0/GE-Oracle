@@ -33,9 +33,8 @@ final class ItemIconImageViewModel {
 		do {
 			self.state = .loading
 
-			guard
-				let imageData = try? await self.imageDataProvider.fetchIconImageData(iconName),
-				let uiImage = UIImage(data: imageData)
+			guard let imageData = try? await self.imageDataProvider.fetchIconImageData(iconName),
+                  let uiImage = UIImage(data: imageData)
 			else {
 				self.state = .failedToLoad
 				return
@@ -51,8 +50,8 @@ final class ItemIconImageViewModel {
 struct ItemIconImageView: View {
 	@State var viewModel: ItemIconImageViewModel
 
-    init(iconName: String) {
-        self.viewModel = ItemIconImageViewModel(iconName: iconName)
+	init(iconName: String) {
+		self.viewModel = ItemIconImageViewModel(iconName: iconName)
 	}
 
 	var body: some View {
@@ -65,22 +64,33 @@ struct ItemIconImageView: View {
 				}
 		case .loaded(let image):
 			image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
 		case .failedToLoad:
 			Image(systemName: "photo").opacity(0.5)
 		}
 	}
 }
 
-#Preview(traits: .fixedLayout(width: 100, height: 100)) {
+#Preview {
 	let _ = DC.shared.register(
 		StubItemImageDataProvider(),
-        forType: ItemImageDataProvider.self
-    )
+		forType: ItemImageDataProvider.self
+	)
 
 	ItemIconImageView(
-        iconName: "Air_talisman.png",
+		iconName: "Air_orb",
 	)
-	.frame(width: 40, height: 40)
+	.frame(width: 50, height: 50)
+
+}
+
+#Preview {
+	let _ = DC.shared.register(
+		StubItemImageDataProvider(),
+		forType: ItemImageDataProvider.self
+	)
+
+	ItemIconImageView(
+		iconName: "Air_orb_detail",
+	)
+	.frame(width: 50, height: 50)
 }

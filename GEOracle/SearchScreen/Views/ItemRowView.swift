@@ -16,7 +16,6 @@ struct ItemRowView: View {
 		HStack {
 			ItemIconImageView(iconName: iconName)
 				.frame(width: 40, height: 40)
-				.aspectRatio(contentMode: .fit)
 			VStack(alignment: .leading) {
 				Text(self.name)
 					.font(.headline)
@@ -31,8 +30,8 @@ struct ItemRowView: View {
 #Preview {
 	let _ = DC.shared.register(
 		StubItemImageDataProvider(),
-        forType: ItemImageDataProvider.self
-    )
+		forType: ItemImageDataProvider.self
+	)
 
 	ItemRowView(
 		name: "Bow",

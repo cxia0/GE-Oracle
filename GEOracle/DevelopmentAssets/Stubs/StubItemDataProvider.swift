@@ -26,6 +26,17 @@ extension Array where Element == Item {
 				buyingLimit: 11000,
 				iconName: "Air talisman.png"
 			),
+            Item(
+                id: 573,
+                name: "Air orb",
+                description: "A magic glowing orb.",
+                isMembersOnly: true,
+                value: 300,
+                lowAlchemyValue: 120,
+                highAlchemyValue: 180,
+                buyingLimit: 11000,
+                iconName: "Air orb.png"
+            ),
 			Item(
 				id: 11802,
 				name: "Armadyl godsword",

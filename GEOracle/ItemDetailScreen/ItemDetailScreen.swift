@@ -24,8 +24,6 @@ class ItemDetailScreenViewModel {
             itemId: item.id,
             stepSize: .fiveMinutes
         )
-
-        print(itemHistoricalData ?? [])
     }
 }
 
