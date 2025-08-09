@@ -32,6 +32,8 @@ struct VolumeChartView: View {
                 AxisTick()
 			}
 		}
+        .chartXVisibleDomain(length: 18000) // 5 hours
+        .chartScrollPosition(initialX: priceHistory.last?.date ?? Date())
 		.chartScrollableAxes(.horizontal)
 	}
 }

@@ -25,6 +25,14 @@ class ItemDetailScreenViewModel {
             stepSize: .fiveMinutes
         )
     }
+
+    func formattedItemValue(property keyPath: KeyPath<Item, Int?>) -> String {
+        guard let value = self.item[keyPath: keyPath] else {
+            return "?"
+        }
+
+        return value.formatted()
+    }
 }
 
 struct ItemDetailScreen: View {
@@ -34,42 +42,110 @@ struct ItemDetailScreen: View {
         self.viewModel = ItemDetailScreenViewModel(item: item)
     }
 
-	var body: some View {
-        VStack {
+    var body: some View {
+        LazyVStack(spacing:16) {
+
+            // Header with name, description, and icon
             HStack {
-                VStack {
-                    Text(self.viewModel.item.name)
-                        .font(.headline)
+                VStack(alignment: .leading) {
+                    Text("11000 GP")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    HStack {
+                        Group {
+                            Image(systemName: "arrow.up.forward")
+                                .padding(.trailing, -4)
+                            Text("330 GP · 3.0%")
+                        }
+                        .fontWeight(.medium)
+                        .foregroundStyle(.green)
+
+                        Text("Today")
+                            .foregroundStyle(.secondary)
+                    }
+                    .font(.subheadline)
                 }
                 Spacer()
-                ItemIconImageView(iconName: self.viewModel.item.iconName)
-                    .frame(width: 40)
+                ItemIconImageView(iconName: viewModel.item.iconName)
             }
-            .padding(.bottom, 16)
-            if let itemHistoricalData = viewModel.itemHistoricalData {
 
+            HStack(spacing: 16) {
+                VStack(spacing: 8) {
+                    HStack {
+                        Label("Value", systemImage: "dollarsign.circle")
+                        Spacer()
+                        Text(viewModel.formattedItemValue(property: \.value))
+                    }
+
+                    HStack {
+                        Label("Buy limit", systemImage: "cart.badge.clock.fill")
+                        Spacer()
+                        Text(viewModel.formattedItemValue(property: \.buyingLimit))
+                    }
+                }
+                .padding(12)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .strokeBorder(.separator, lineWidth: 0.75)
+                }
+
+                VStack(spacing: 8) {
+                    HStack {
+                        Label("Low Alch.", systemImage: "flame")
+                        Spacer()
+                        Text(viewModel.formattedItemValue(property: \.lowAlchemyValue))
+                    }
+                    HStack {
+                        Label("High Alch.", systemImage: "flame.fill")
+                        Spacer()
+                        Text(viewModel.formattedItemValue(property: \.highAlchemyValue))
+                    }
+                }
+                .padding(12)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .strokeBorder(.separator, lineWidth: 0.75)
+                }
+            }
+            .font(.subheadline)
+
+            if let itemHistoricalData = viewModel.itemHistoricalData {
                 VolumeChartView(priceHistory: itemHistoricalData)
                     .frame(height: 250)
+                    .padding(.top, 8)
             }
         }
         .padding()
         .task {
-            await self.viewModel.loadHistoricalData()
+            await viewModel.loadHistoricalData()
         }
-	}
+    }
 }
 
 #if DEBUG
 #Preview {
-	let _ = DC.shared.register(
-		StubItemImageDataProvider(), forType: ItemImageDataProvider.self
+    let _ = DC.shared.register(
+        StubItemImageDataProvider(), forType: ItemImageDataProvider.self
     )
 
     let _ = DC.shared.register(
         StubItemPricesProvider(), forType: ItemPricesProvider.self
     )
 
-	let items = StubItemDataProvider().fetchItems()
-	ItemDetailScreen(item: items[0])
+    let item = Item(
+        id: 1438,
+        name: "Air talisman",
+        description: "A mysterious power emanates from the talisman...",
+        isMembersOnly: false,
+        value: 11250,
+        lowAlchemyValue: 76,
+        highAlchemyValue: 114,
+        buyingLimit: 11000,
+        iconName: "Air talisman.png"
+    )
+
+    ItemDetailScreen(item: item)
+
 }
 #endif
+
