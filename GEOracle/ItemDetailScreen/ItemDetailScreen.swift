@@ -10,142 +10,137 @@ import SwiftUI
 @MainActor
 @Observable
 class ItemDetailScreenViewModel {
-    let item: Item
-    let itemPricesProvider: ItemPricesProvider
-    var itemHistoricalData: [HistoricalItemPrice]?
+	let item: Item
+	let itemPricesProvider: ItemPricesProvider
+	var itemHistoricalData: [HistoricalItemPrice]?
 
-    init(item: Item) {
-        self.item = item
-        self.itemPricesProvider = DC.shared.resolve(forType: ItemPricesProvider.self)!
-    }
+	init(item: Item) {
+		self.item = item
+		self.itemPricesProvider = DC.shared.resolve(forType: ItemPricesProvider.self)!
+	}
 
-    func loadHistoricalData() async {
-        itemHistoricalData = try? await itemPricesProvider.fetchHistoricalData(
-            itemId: item.id,
-            stepSize: .fiveMinutes
-        )
-    }
+	func loadHistoricalData() async {
+		itemHistoricalData = try? await itemPricesProvider.fetchHistoricalData(
+			itemId: item.id,
+			stepSize: .fiveMinutes
+		)
+	}
 
-    func formattedItemValue(property keyPath: KeyPath<Item, Int?>) -> String {
-        guard let value = self.item[keyPath: keyPath] else {
-            return "?"
-        }
+	func formattedItemValue(property keyPath: KeyPath<Item, Int?>) -> String {
+		guard let value = self.item[keyPath: keyPath] else {
+			return "?"
+		}
 
-        return value.formatted()
-    }
+		return value.formatted()
+	}
 }
 
 struct ItemDetailScreen: View {
-    @State private var viewModel: ItemDetailScreenViewModel
+	@State private var viewModel: ItemDetailScreenViewModel
 
-    init(item: Item) {
-        self.viewModel = ItemDetailScreenViewModel(item: item)
-    }
+	init(item: Item) {
+		self.viewModel = ItemDetailScreenViewModel(item: item)
+	}
 
-    var body: some View {
-        LazyVStack(spacing:16) {
+	var body: some View {
+		LazyVStack(spacing: 16) {
 
-            // Header with name, description, and icon
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("11000 GP")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    HStack {
-                        Group {
-                            Image(systemName: "arrow.up.forward")
-                                .padding(.trailing, -4)
-                            Text("330 GP · 3.0%")
-                        }
-                        .fontWeight(.medium)
-                        .foregroundStyle(.green)
+			// Header with name, description, and icon
+			HStack {
+				VStack(alignment: .leading) {
+					Text("11000 GP")
+						.font(.title)
+						.fontWeight(.bold)
 
-                        Text("Today")
-                            .foregroundStyle(.secondary)
-                    }
-                    .font(.subheadline)
-                }
-                Spacer()
-                ItemIconImageView(iconName: viewModel.item.iconName)
-            }
+					HStack {
+						Group {
+							Image(systemName: "arrow.up.forward")
+								.padding(.trailing, -4)
+							Text("330 GP · 3.0%")
+						}
+						.fontWeight(.medium)
+						.foregroundStyle(.green)
 
-            HStack(spacing: 16) {
-                VStack(spacing: 8) {
-                    HStack {
-                        Label("Value", systemImage: "dollarsign.circle")
-                        Spacer()
-                        Text(viewModel.formattedItemValue(property: \.value))
-                    }
+						Text("Today")
+							.foregroundStyle(.secondary)
+					}
+					.font(.subheadline)
+				}
+				Spacer()
+				ItemIconImageView(iconName: viewModel.item.iconName)
+			}
 
-                    HStack {
-                        Label("Buy limit", systemImage: "cart.badge.clock.fill")
-                        Spacer()
-                        Text(viewModel.formattedItemValue(property: \.buyingLimit))
-                    }
-                }
-                .padding(12)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 8)
-                        .strokeBorder(.separator, lineWidth: 0.75)
-                }
+			// Item stats
+			HStack(spacing: 16) {
+				Group {
+					VStack(spacing: 8) {
+						HStack {
+							Label("Value", systemImage: "dollarsign.circle")
+							Spacer()
+							Text(viewModel.formattedItemValue(property: \.value))
+						}
 
-                VStack(spacing: 8) {
-                    HStack {
-                        Label("Low Alch.", systemImage: "flame")
-                        Spacer()
-                        Text(viewModel.formattedItemValue(property: \.lowAlchemyValue))
-                    }
-                    HStack {
-                        Label("High Alch.", systemImage: "flame.fill")
-                        Spacer()
-                        Text(viewModel.formattedItemValue(property: \.highAlchemyValue))
-                    }
-                }
-                .padding(12)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 8)
-                        .strokeBorder(.separator, lineWidth: 0.75)
-                }
-            }
-            .font(.subheadline)
+						HStack {
+							Label("Limit", systemImage: "cart.badge.clock.fill")
+							Spacer()
+							Text(viewModel.formattedItemValue(property: \.buyingLimit))
+						}
+					}
 
-            if let itemHistoricalData = viewModel.itemHistoricalData {
-                VolumeChartView(priceHistory: itemHistoricalData)
-                    .frame(height: 250)
-                    .padding(.top, 8)
-            }
-        }
-        .padding()
-        .task {
-            await viewModel.loadHistoricalData()
-        }
-    }
+					VStack(spacing: 8) {
+						HStack {
+							Label("Low Alch.", systemImage: "flame")
+							Spacer()
+							Text(viewModel.formattedItemValue(property: \.lowAlchemyValue))
+						}
+						HStack {
+							Label("High Alch.", systemImage: "flame.fill")
+							Spacer()
+							Text(viewModel.formattedItemValue(property: \.highAlchemyValue))
+						}
+					}
+				}
+				.padding(12)
+				.roundedBorder(style: .separator, cornerRadius: 8, lineWidth: 0.75)
+				.font(.subheadline)
+			}
+
+			if let itemHistoricalData = viewModel.itemHistoricalData {
+				VolumeChartView(priceHistory: itemHistoricalData)
+					.frame(height: 224)
+					.padding(.top, 8)
+			}
+		}
+		.padding()
+		.task {
+			await viewModel.loadHistoricalData()
+		}
+	}
 }
 
 #if DEBUG
 #Preview {
-    let _ = DC.shared.register(
-        StubItemImageDataProvider(), forType: ItemImageDataProvider.self
-    )
+	let _ = DC.shared.register(
+		StubItemImageDataProvider(), forType: ItemImageDataProvider.self
+	)
 
-    let _ = DC.shared.register(
-        StubItemPricesProvider(), forType: ItemPricesProvider.self
-    )
+	let _ = DC.shared.register(
+		StubItemPricesProvider(), forType: ItemPricesProvider.self
+	)
 
-    let item = Item(
-        id: 1438,
-        name: "Air talisman",
-        description: "A mysterious power emanates from the talisman...",
-        isMembersOnly: false,
-        value: 11250,
-        lowAlchemyValue: 76,
-        highAlchemyValue: 114,
-        buyingLimit: 11000,
-        iconName: "Air talisman.png"
-    )
+	let item = Item(
+		id: 1438,
+		name: "Air talisman",
+		description: "A mysterious power emanates from the talisman...",
+		isMembersOnly: false,
+		value: 11250,
+		lowAlchemyValue: 76,
+		highAlchemyValue: 114,
+		buyingLimit: 11000,
+		iconName: "Air talisman.png"
+	)
 
-    ItemDetailScreen(item: item)
+	ItemDetailScreen(item: item)
 
 }
 #endif
-
