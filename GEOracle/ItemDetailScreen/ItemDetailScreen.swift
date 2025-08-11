@@ -19,13 +19,6 @@ class ItemDetailScreenViewModel {
 		self.itemPricesProvider = DC.shared.resolve(forType: ItemPricesProvider.self)!
 	}
 
-	func loadHistoricalData() async {
-		itemHistoricalData = try? await itemPricesProvider.fetchHistoricalData(
-			itemId: item.id,
-			stepSize: .fiveMinutes
-		)
-	}
-
 	func formattedItemValue(property keyPath: KeyPath<Item, Int?>) -> String {
 		guard let value = self.item[keyPath: keyPath] else {
 			return "?"
@@ -105,16 +98,11 @@ struct ItemDetailScreen: View {
 				.font(.subheadline)
 			}
 
-			if let itemHistoricalData = viewModel.itemHistoricalData {
-				VolumeChartView(priceHistory: itemHistoricalData)
-					.frame(height: 224)
-					.padding(.top, 8)
-			}
+            VolumeChartView(itemID: viewModel.item.id)
+                .frame(height: 224)
+                .padding(.top, 8)
 		}
 		.padding()
-		.task {
-			await viewModel.loadHistoricalData()
-		}
 	}
 }
 

@@ -9,12 +9,20 @@ import Foundation
 
 struct StubItemPricesProvider: ItemPricesProvider {
 
+    let delay: Duration
+
+    init(delay: Duration = .zero) {
+        self.delay = delay
+    }
+
 	func fetchLatestPrices() -> LatestItemPrices { .mock }
 
 	func fetchHistoricalData(
 		itemId: Int,
-		stepSize: HistoricalDataTimestep
-	) -> [HistoricalItemPrice] {
+		stepSize: HistoricalDataTimestep,
+	) async -> [HistoricalItemPrice] {
+        try? await Task.sleep(for: delay)
+
 		do {
 			guard let url = Bundle.main.url(forResource: "five_minutes", withExtension: "json") else {
 				return []
