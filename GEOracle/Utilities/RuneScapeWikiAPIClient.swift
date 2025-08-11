@@ -112,7 +112,12 @@ extension RuneScapeWikiAPIClient {
 			throw .badURL
 		}
 
-		let urlRequest = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
+		var urlRequest = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
+        urlRequest.setValue(
+            "Price Tracker for iOS - Discord: @darkeiz",
+            forHTTPHeaderField: "User-Agent"
+        )
+
 		guard let (data, response) = try? await self.urlSession.data(for: urlRequest) else {
 			throw .networkError
 		}
