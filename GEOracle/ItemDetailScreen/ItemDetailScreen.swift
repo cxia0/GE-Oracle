@@ -11,13 +11,8 @@ import SwiftUI
 @Observable
 class ItemDetailScreenViewModel {
 	let item: Item
-	let itemPricesProvider: ItemPricesProvider
-	var itemHistoricalData: [HistoricalItemPrice]?
 
-	init(item: Item) {
-		self.item = item
-		self.itemPricesProvider = DC.shared.resolve(forType: ItemPricesProvider.self)!
-	}
+	init(item: Item) { self.item = item }
 
 	func formattedItemValue(property keyPath: KeyPath<Item, Int?>) -> String {
 		guard let value = self.item[keyPath: keyPath] else {
@@ -98,9 +93,9 @@ struct ItemDetailScreen: View {
 				.font(.subheadline)
 			}
 
-            VolumeChartView(itemID: viewModel.item.id)
-                .frame(height: 224)
-                .padding(.top, 8)
+			VolumeChartView(itemID: viewModel.item.id)
+				.frame(height: 224)
+				.padding(.top, 8)
 		}
 		.padding()
 	}
@@ -129,6 +124,5 @@ struct ItemDetailScreen: View {
 	)
 
 	ItemDetailScreen(item: item)
-
 }
 #endif
