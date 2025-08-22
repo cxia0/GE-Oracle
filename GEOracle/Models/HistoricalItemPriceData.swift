@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct HistoricalItemPricesResponse: Decodable {
+struct HistoricalItemTradingDataResponse: Decodable {
     let itemID: Int
-    let data: [HistoricalItemPrice]
+    let data: [HistoricalItemTradingData]
 
     enum CodingKeys: String, CodingKey {
         case itemID = "itemId"
@@ -17,7 +17,7 @@ struct HistoricalItemPricesResponse: Decodable {
     }
 }
 
-struct HistoricalItemPrice: Decodable {
+struct HistoricalItemTradingData: Decodable {
 
     let date: Date
     let avgHighPrice: Int?

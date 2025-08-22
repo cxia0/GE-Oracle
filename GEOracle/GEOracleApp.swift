@@ -13,7 +13,7 @@ struct GEOracleApp: App {
 	@State private var path = NavigationPath()
 
 	init() {
-		DC.shared.register(RuneScapeWikiAPIClient(), forType: ItemPricesProvider.self)
+		DC.shared.register(RuneScapeWikiAPIClient(), forType: ItemTradingDataProvider.self)
 		DC.shared.register(RuneScapeWikiAPIClient(), forType: ItemImageDataProvider.self)
 		DC.shared.register(RuneScapeWikiAPIClient(), forType: ItemDataProvider.self)
 	}

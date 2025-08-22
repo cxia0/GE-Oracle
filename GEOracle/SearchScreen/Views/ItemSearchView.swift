@@ -47,8 +47,8 @@ struct ItemSearchView: View {
 	)
 
 	let _ = DC.shared.register(
-		StubItemPricesProvider(),
-		forType: ItemPricesProvider.self
+		StubItemTradingDataProvider(),
+		forType: ItemTradingDataProvider.self
 	)
 
 	let _ = DC.shared.register(

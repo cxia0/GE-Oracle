@@ -13,25 +13,25 @@ import SwiftUI
 class VolumeChartViewModel {
 	enum State {
 		case loading
-		case loaded(data: [HistoricalItemPrice])
+		case loaded(data: [HistoricalItemTradingData])
 		case error
 	}
 
 	var state = State.loading
 
 	private let itemID: Int
-	private let itemPricesProvider: any ItemPricesProvider
+	private let itemTradingDataProvider: any ItemTradingDataProvider
 
 	init(itemID: Int) {
 		self.itemID = itemID
-		self.itemPricesProvider = DC.shared.resolve(forType: ItemPricesProvider.self)!
+		self.itemTradingDataProvider = DC.shared.resolve(forType: ItemTradingDataProvider.self)!
 	}
 
 	func loadData() async {
 		state = .loading
 
 		do {
-			let itemHistoricalData = try await itemPricesProvider.fetchHistoricalData(
+			let itemHistoricalData = try await itemTradingDataProvider.fetchHistoricalTradingData(
 				itemId: itemID,
 				stepSize: .fiveMinutes
 			)
@@ -85,8 +85,8 @@ struct VolumeChartView: View {
 
 #Preview {
 	let _ = DC.shared.register(
-		StubItemPricesProvider(delay: .seconds(1)),
-		forType: ItemPricesProvider.self
+		StubItemTradingDataProvider(delay: .seconds(1)),
+		forType: ItemTradingDataProvider.self
 	)
 
 	VolumeChartView(itemID: 1)

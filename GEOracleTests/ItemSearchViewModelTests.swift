@@ -11,7 +11,7 @@ import Testing
 @MainActor
 struct ItemSearchViewModelTests {
 
-	let itemPricesProvider = MockItemPricesProvider()
+	let itemTradingDataProvider = MockItemTradingDataProvider()
 	let itemDataProvider = MockItemDataProvider()
 
 	let viewModel: ItemSearchViewModel
@@ -29,7 +29,7 @@ struct ItemSearchViewModelTests {
 		}
 
         DC.shared.register(self.itemDataProvider, forType: ItemDataProvider.self)
-        DC.shared.register(self.itemPricesProvider, forType: ItemPricesProvider.self)
+        DC.shared.register(self.itemTradingDataProvider, forType: ItemTradingDataProvider.self)
 
 		self.viewModel = ItemSearchViewModel(
 			searchDelay: .zero

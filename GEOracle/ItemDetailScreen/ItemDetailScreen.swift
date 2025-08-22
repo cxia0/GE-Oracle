@@ -7,22 +7,6 @@
 
 import SwiftUI
 
-@MainActor
-@Observable
-class ItemDetailScreenViewModel {
-	let item: Item
-
-	init(item: Item) { self.item = item }
-
-	func formattedItemValue(property keyPath: KeyPath<Item, Int?>) -> String {
-		guard let value = self.item[keyPath: keyPath] else {
-			return "?"
-		}
-
-		return value.formatted()
-	}
-}
-
 struct ItemDetailScreen: View {
 	@State private var viewModel: ItemDetailScreenViewModel
 
@@ -108,7 +92,7 @@ struct ItemDetailScreen: View {
 	)
 
 	let _ = DC.shared.register(
-		StubItemPricesProvider(), forType: ItemPricesProvider.self
+		StubItemTradingDataProvider(), forType: ItemTradingDataProvider.self
 	)
 
 	let item = Item(

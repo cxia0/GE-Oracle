@@ -13,7 +13,7 @@ import SwiftUI
 final class ItemSearchViewModel {
 
 	// Dependencies
-	@ObservationIgnored private let itemPricesProvider: ItemPricesProvider
+	@ObservationIgnored private let itemTradingDataProvider: ItemTradingDataProvider
 	@ObservationIgnored private let itemDataProvider: ItemDataProvider
 	@ObservationIgnored private let itemImageDataProvider: ItemImageDataProvider
 
@@ -33,7 +33,7 @@ final class ItemSearchViewModel {
 		searchDelay: Duration = .milliseconds(300),
 		initialSearch: String = ""
 	) {
-		self.itemPricesProvider = DC.shared.resolve(forType: ItemPricesProvider.self)!
+		self.itemTradingDataProvider = DC.shared.resolve(forType: ItemTradingDataProvider.self)!
 		self.itemDataProvider = DC.shared.resolve(forType: ItemDataProvider.self)!
 		self.itemImageDataProvider = DC.shared.resolve(forType: ItemImageDataProvider.self)!
 

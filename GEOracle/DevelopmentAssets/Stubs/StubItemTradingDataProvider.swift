@@ -1,5 +1,5 @@
 //
-//  StubItemPricesProvider.swift
+//  StubItemTradingDataProvider.swift
 //  GEOracle
 //
 //  Created by Chunfeng Xia on 29/01/2025.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct StubItemPricesProvider: ItemPricesProvider {
+struct StubItemTradingDataProvider: ItemTradingDataProvider {
 
     let delay: Duration
 
@@ -15,12 +15,13 @@ struct StubItemPricesProvider: ItemPricesProvider {
         self.delay = delay
     }
 
-	func fetchLatestPrices() -> LatestItemPrices { .mock }
+    func fetchLatestTradingData() -> [String: ItemTradingData] { .mock }
 
-	func fetchHistoricalData(
-		itemId: Int,
-		stepSize: HistoricalDataTimestep,
-	) async -> [HistoricalItemPrice] {
+    func fetchHistoricalTradingData(
+        itemId: Int,
+        stepSize: DataTimestep
+    ) async throws(NetworkServiceError) -> [HistoricalItemTradingData] {
+
         try? await Task.sleep(for: delay)
 
 		do {
@@ -31,7 +32,7 @@ struct StubItemPricesProvider: ItemPricesProvider {
 			let jsonData = try Data(contentsOf: url)
 
 			let decoder = JSONDecoder()
-			let data = try decoder.decode(HistoricalItemPricesResponse.self, from: jsonData)
+			let data = try decoder.decode(HistoricalItemTradingDataResponse.self, from: jsonData)
 
 			return data.data
 		} catch {
@@ -41,34 +42,34 @@ struct StubItemPricesProvider: ItemPricesProvider {
 	}
 }
 
-extension LatestItemPrices {
+extension Dictionary where Key == String, Value == ItemTradingData {
 	static let mock = {
 		let data = [
-			"1": LatestItemPrice(
+			"1": ItemTradingData(
 				high: 22,
 				highTime: 1_645_568_542,
 				low: 11,
 				lowTime: 1_294_744_271
 			),
-			"2": LatestItemPrice(
+			"2": ItemTradingData(
 				high: 99,
 				highTime: 1_738_158_650,
 				low: 90,
 				lowTime: 1_738_158_656
 			),
-			"3": LatestItemPrice(
+			"3": ItemTradingData(
 				high: 50,
 				highTime: 1_738_158_650,
 				low: 45,
 				lowTime: 1_738_158_656
 			),
-			"4": LatestItemPrice(
+			"4": ItemTradingData(
 				high: 1_999_999_999,
 				highTime: 1_738_158_650,
 				low: 1_888_888_888,
 				lowTime: 1_738_158_656
 			),
 		]
-		return LatestItemPrices(data: data)
+		return data
 	}()
 }
