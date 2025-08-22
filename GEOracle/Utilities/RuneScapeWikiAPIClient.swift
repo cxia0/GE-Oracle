@@ -23,10 +23,10 @@ enum DataTimestep {
 }
 
 protocol ItemTradingDataProvider: Sendable {
-    func fetchLatestTradingData() async throws(NetworkServiceError) -> [String: ItemTradingData]
+    func fetchLatestData() async throws(NetworkServiceError) -> [String: ItemTradingData]
 
-	func fetchHistoricalTradingData(
-		itemId: Int,
+	func fetchHistoricalData(
+		itemID: Int,
 		stepSize: DataTimestep
 	) async throws(NetworkServiceError) -> [HistoricalItemTradingData]
 }
@@ -57,7 +57,7 @@ struct RuneScapeWikiAPIClient: ItemTradingDataProvider, ItemDataProvider, ItemIm
 	}
 
 	/// Fetches the latest prices of all items.
-    func fetchLatestTradingData() async throws(NetworkServiceError) -> [String: ItemTradingData] {
+    func fetchLatestData() async throws(NetworkServiceError) -> [String: ItemTradingData] {
 
 		let url = self.itemDataEndpoint + "latest"
 
@@ -65,7 +65,7 @@ struct RuneScapeWikiAPIClient: ItemTradingDataProvider, ItemDataProvider, ItemIm
         return response.data
 	}
 
-	func fetchHistoricalTradingData(itemId: Int, stepSize: DataTimestep)
+	func fetchHistoricalData(itemID: Int, stepSize: DataTimestep)
 		async throws(NetworkServiceError) -> [HistoricalItemTradingData]
 	{
 		let timeStepParameter: String
@@ -82,7 +82,7 @@ struct RuneScapeWikiAPIClient: ItemTradingDataProvider, ItemDataProvider, ItemIm
 		}
 
 		let url =
-			self.itemDataEndpoint + "/timeseries?id=\(itemId)&timestep=\(timeStepParameter)"
+			self.itemDataEndpoint + "/timeseries?id=\(itemID)&timestep=\(timeStepParameter)"
 		let response = try await self.fetchAndDecode(HistoricalItemTradingDataResponse.self, from: url)
 		return response.data
 	}

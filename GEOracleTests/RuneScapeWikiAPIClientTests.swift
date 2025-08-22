@@ -44,7 +44,7 @@ struct RuneScapeWikiAPIClientTests {
 		self.urlSession.dataClosure = { throw NSError() }
 		
 		await #expect(throws: NetworkServiceError.networkError) {
-			try await self.runeScapeWikiAPIClient.fetchLatestTradingData()
+			try await self.runeScapeWikiAPIClient.fetchLatestData()
 		}
 	}
 	
@@ -52,7 +52,7 @@ struct RuneScapeWikiAPIClientTests {
 		self.urlSession.dataClosure = { return (Data(), Self.badHTTPURLResponse) }
 		
 		await #expect(throws: NetworkServiceError.badResponse) {
-			try await self.runeScapeWikiAPIClient.fetchLatestTradingData()
+			try await self.runeScapeWikiAPIClient.fetchLatestData()
 		}
 	}
 	
@@ -61,7 +61,7 @@ struct RuneScapeWikiAPIClientTests {
 		self.decoder.decodeClosure = { throw DummyError() }
 		
 		await #expect(throws: NetworkServiceError.decodingError) {
-			try await self.runeScapeWikiAPIClient.fetchLatestTradingData()
+			try await self.runeScapeWikiAPIClient.fetchLatestData()
 		}
 	}
 }

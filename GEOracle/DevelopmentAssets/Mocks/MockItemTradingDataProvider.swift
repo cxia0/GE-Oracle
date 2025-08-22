@@ -7,19 +7,19 @@
 
 final class MockItemTradingDataProvider: ItemTradingDataProvider {
 
-	func fetchHistoricalTradingData(
-		itemId: Int,
+	func fetchHistoricalData(
+        itemID: Int,
 		stepSize: DataTimestep
 	) async throws(NetworkServiceError) -> [HistoricalItemTradingData] {
 		fatalError("❓ Unimplemented: \(#function)")
 	}
 
-	var fetchLatestTradingDataClosure: () throws(NetworkServiceError) -> [String : ItemTradingData] = {
+	var fetchLatestDataClosure: () throws(NetworkServiceError) -> [String : ItemTradingData] = {
 		fatalError("❓ Unimplemented: \(#function)")
 	}
 
-	func fetchLatestTradingData() async throws(NetworkServiceError) -> [String : ItemTradingData] {
-		try self.fetchLatestTradingDataClosure()
+	func fetchLatestData() async throws(NetworkServiceError) -> [String : ItemTradingData] {
+		try self.fetchLatestDataClosure()
 	}
 }
 

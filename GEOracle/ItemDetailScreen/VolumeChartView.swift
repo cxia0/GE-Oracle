@@ -31,8 +31,8 @@ class VolumeChartViewModel {
 		state = .loading
 
 		do {
-			let itemHistoricalData = try await itemTradingDataProvider.fetchHistoricalTradingData(
-				itemId: itemID,
+			let itemHistoricalData = try await itemTradingDataProvider.fetchHistoricalData(
+				itemID: itemID,
 				stepSize: .fiveMinutes
 			)
 			state = .loaded(data: itemHistoricalData)

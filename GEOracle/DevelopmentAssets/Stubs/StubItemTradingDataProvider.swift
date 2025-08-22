@@ -15,10 +15,10 @@ struct StubItemTradingDataProvider: ItemTradingDataProvider {
         self.delay = delay
     }
 
-    func fetchLatestTradingData() -> [String: ItemTradingData] { .mock }
+    func fetchLatestData() -> [String: ItemTradingData] { .mock }
 
-    func fetchHistoricalTradingData(
-        itemId: Int,
+    func fetchHistoricalData(
+        itemID: Int,
         stepSize: DataTimestep
     ) async throws(NetworkServiceError) -> [HistoricalItemTradingData] {
 
