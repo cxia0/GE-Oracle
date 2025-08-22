@@ -78,7 +78,9 @@ struct VolumeChartView: View {
 			.chartScrollPosition(initialX: data.last?.date ?? Date())
 			.chartScrollableAxes(.horizontal)
 		case .error:
-			EmptyView()
+            Text("Chart unavailable.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
 		}
 	}
 }

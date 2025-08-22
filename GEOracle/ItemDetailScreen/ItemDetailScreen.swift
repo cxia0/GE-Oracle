@@ -18,6 +18,7 @@ struct ItemDetailScreen: View {
 		LazyVStack(spacing: 16) {
 
 			// Header with name, description, and icon
+            // TODO: Use real latest trading data
 			HStack {
 				VStack(alignment: .leading) {
 					Text("11000 GP")
